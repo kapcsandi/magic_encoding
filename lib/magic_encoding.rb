@@ -2,27 +2,62 @@
 
 # A simple library to prepend magic comments for encoding to multiple ".rb" files
 
+require 'magic_encoding/version'
+
 module AddMagicComment
-  
   # Options :
-  # 1 : Encoding
-  # 2 : Path
+  # --encoding, -e ENCODING: Encoding
+  # Default is utf-8
+  #
+  # --path, -p PATH: Path
+  # Default is . (current directory)
+  #
+  # --files, -f FILES: File glob parameters. Eg. *.erb
+  # Default is *.rb
+  #
   # TODO : check that the encoding specified is a valid encoding
   def self.process(options)
-    
+
     # defaults
-    encoding  = options[0] || "utf-8"
-    directory = options[1] || Dir.pwd
-    
-    prefix = "# -*- encoding : #{encoding} -*-\n"
-    
+    opts = OpenStruct.new
+    opts.encoding  = "utf-8"
+    opts.directory = Dir.pwd
+    opts.files = "*.rb"
+
+
+    OptionParser.new do |o|
+      o.banner = "Usage: magic_encoding [options]"
+      o.on("-e", "--encoding [ENCODING]", "Sets encoding to other than utf-8") do |e|
+        opts.encoding = e || opts.encoding
+      end
+
+      o.on("-p", "--path [PATH]", "Sets search path to other than current directory") do |d|
+        opts.path = d || opts.path
+      end
+
+      o.on("-f", "--files [FILES]", "Sets the file search glob parameter to other than *.rb") do |f|
+        opts.files = f || opts.files
+      end
+
+      o.on("-v", "--version", "Prints version info") do
+        puts 'v' + VERSION
+        exit
+      end
+      o.on("-h", "--help", "This help") do
+        puts o
+        exit
+      end
+    end.parse! options
+
+    prefix = "# -*- encoding : #{opts.encoding} -*-\n"
+
     # TODO : add options for recursivity (and application of the script to a single file)
-    rbfiles = File.join(directory ,"**", "*.rb")
+    rbfiles = File.join(opts.directory ,"**", opts.files)
     Dir.glob(rbfiles).each do |filename|
       file = File.new(filename, "r+")
-      
+
       lines = file.readlines
-      
+
       # remove current encoding comment(s)
       while lines[0] && (
             lines[0].starts_with?("# encoding") || 
@@ -33,14 +68,14 @@ module AddMagicComment
 
       # set current encoding
       lines.insert(0,prefix)
-      
+
       file.pos = 0
       file.puts(lines.join) 
       file.close
     end
-    p "Magic comments set for #{Dir.glob(rbfiles).count} source files"
+    puts "Magic comments set for #{Dir.glob(rbfiles).count} source files"
   end
-  
+
 end
 
 class String

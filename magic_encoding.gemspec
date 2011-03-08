@@ -1,12 +1,15 @@
 # -*- encoding: utf-8 -*-
+$:.push File.expand_path("../lib", __FILE__)
+require "magic_encoding/version"
 
 Gem::Specification.new do |s|
   s.name = %q{magic_encoding}
-  s.version = "0.0.2"
+  s.version = AddMagicComment::VERSION
 
+  s.platform = Gem::Platform::RUBY
   s.required_rubygems_version = Gem::Requirement.new(">= 1.3.6") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Manuel Ryan"]
-  s.date = %q{2010-08-03}
+  s.authors = ["Manuel Ryan","Kapcsándi István"]
+  s.date = %q{2011-03-08}
   s.default_executable = %q{magic_encoding}
   s.email = ["ryan@shamu.ch"]
   s.executables = ["magic_encoding"]

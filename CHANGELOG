@@ -1,0 +1,14 @@
+## 0.0.3 (Marc 8, 2011)
+
+Options added: --encoding, --path, --files
+
+## 0.0.2 (August 3, 2010)
+
+Existing magic comments are now erased before the file is prepended with the desired magic comment
+Bugfixes
+
+## 0.0.1 (August 3, 2010)
+
+Initial Version
+
+

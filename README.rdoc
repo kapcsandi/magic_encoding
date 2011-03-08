@@ -26,13 +26,25 @@ this will prepend every ".rb" file in the working directory (recursively) with t
 
   # -*- encoding : utf-8 -*-
 
-Notes : 
 - existing magic comments are replaced
 - the rest of the file remains unchanged
-  
+
+== Optional parameters
+
 you can pass options to the tool to specify the desired encoding and the path where you want the tool to run, for example :
 
-  magic_encoding Shift-JIS /path/to/ruby/project
+  --encoding, -e 
+  Default: utf-8
+
+  --path, -p 
+  Default: . (current directory)
+
+  --files, -f
+  Default: *.rb
+
+Example:
+
+  magic_encoding --encoding Shift-JIS --path /path/to/ruby/project --files *.erb
 
 For more information on ruby >= 1.9 encoding features, check out http://blog.grayproductions.net/articles/ruby_19s_three_default_encodings
 
